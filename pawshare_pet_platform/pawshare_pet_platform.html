@@ -1,0 +1,805 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --warm-bg:#FDF8F3;--card-bg:#FFF1E8;--primary:#FF6B35;--primary-dark:#E05520;--text-dark:#2C1810;--text-mid:#6B4C3B;--text-light:#A07860;--border:#F0D9C8;--white:#FFFFFF;--success:#4CAF50
+}
+body{font-family:'Nunito',sans-serif;background:var(--warm-bg);color:var(--text-dark);min-height:100vh}
+.app{min-height:600px;position:relative}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100%)}}
+.page{}
+nav{background:rgba(253,248,243,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:50}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--primary);cursor:pointer;letter-spacing:-0.5px}
+.logo span{font-size:20px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-btn{background:transparent;border:1.5px solid var(--primary);color:var(--primary);padding:6px 14px;border-radius:20px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;transition:all .2s}
+.nav-btn:hover{background:var(--primary);color:#fff}
+.nav-btn.ghost{border-color:transparent;color:var(--text-mid)}
+.nav-btn.ghost:hover{background:var(--card-bg);color:var(--primary)}
+.nav-btn.solid{background:var(--primary);color:#fff;border-color:var(--primary)}
+.nav-btn.solid:hover{background:var(--primary-dark)}
+.nav-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);cursor:pointer}
+.nav-name{font-size:13px;font-weight:600;color:var(--text-mid)}
+.avatar-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border:2px solid var(--primary);flex-shrink:0}
+.avatar-lg{width:54px;height:54px;font-size:20px;border-width:2.5px}
+.avatar-sm{width:36px;height:36px;font-size:14px}
+.container{max-width:680px;margin:0 auto;padding:24px 16px}
+.auth-wrap{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.auth-card{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:36px 32px;width:100%;max-width:420px;box-shadow:0 4px 24px rgba(44,24,16,0.06)}
+.auth-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:6px}
+.auth-sub{font-size:14px;color:var(--text-light);margin-bottom:28px}
+.form-group{margin-bottom:16px}
+label{display:block;font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:6px}
+input[type=text],input[type=password],textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text-dark);background:var(--warm-bg);outline:none;transition:border .2s}
+input[type=text]:focus,input[type=password]:focus,textarea:focus{border-color:var(--primary);background:var(--white)}
+textarea{resize:vertical;min-height:100px}
+.file-label{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px dashed var(--border);border-radius:10px;cursor:pointer;font-size:13px;color:var(--text-light);transition:border .2s;background:var(--warm-bg)}
+.file-label:hover{border-color:var(--primary);color:var(--primary)}
+input[type=file]{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 24px;border-radius:25px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;width:100%}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.btn-secondary{background:var(--card-bg);color:var(--primary);border:1.5px solid var(--primary)}
+.btn-secondary:hover{background:var(--primary);color:#fff}
+.link-text{text-align:center;margin-top:18px;font-size:13px;color:var(--text-light)}
+.link-text a{color:var(--primary);font-weight:700;cursor:pointer;text-decoration:none}
+.link-text a:hover{text-decoration:underline}
+.err-msg{font-size:13px;color:#d32f2f;margin-top:6px;background:#ffebee;padding:8px 12px;border-radius:8px}
+.home-hero{text-align:center;padding:36px 0 24px}
+.home-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.home-sub{font-size:15px;color:var(--text-light)}
+.new-post-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 28px;background:var(--primary);color:#fff;border:none;border-radius:16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;margin:20px auto;width:100%;max-width:340px}
+.new-post-btn:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,53,0.3)}
+.section-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text-dark);margin:28px 0 16px;display:flex;align-items:center;gap:8px}
+.post-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;transition:transform .2s,box-shadow .2s}
+.post-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(44,24,16,0.08)}
+.post-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.post-author-info{flex:1}
+.post-author-id{font-size:13px;font-weight:700;color:var(--text-dark)}
+.post-time{font-size:11px;color:var(--text-light);margin-top:2px}
+.post-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:8px;line-height:1.3}
+.post-content{font-size:14px;color:var(--text-mid);line-height:1.7;margin-bottom:12px}
+.post-image{width:100%;border-radius:12px;max-height:300px;object-fit:cover;margin-bottom:12px}
+.post-actions{display:flex;align-items:center;gap:16px;padding-top:12px;border-top:1px solid var(--border)}
+.action-btn{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--text-light);font-size:13px;font-weight:600;padding:6px 10px;border-radius:20px;transition:all .2s;font-family:'Nunito',sans-serif}
+.action-btn:hover{background:var(--card-bg);color:var(--primary)}
+.action-btn.liked{color:#e53935}
+.action-btn.liked:hover{background:#ffebee;color:#c62828}
+.comment-section{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.comment-item{display:flex;gap:10px;margin-bottom:12px}
+.comment-body{flex:1;background:var(--warm-bg);border-radius:12px;padding:10px 14px}
+.comment-id{font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:3px}
+.comment-text{font-size:13px;color:var(--text-mid)}
+.comment-input-row{display:flex;gap:8px;margin-top:10px;align-items:flex-start}
+.comment-input-row input{flex:1;border-radius:20px;padding:8px 14px;font-size:13px}
+.send-btn{background:var(--primary);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:background .2s}
+.send-btn:hover{background:var(--primary-dark)}
+.login-hint{font-size:13px;color:var(--text-light);text-align:center;padding:10px;background:var(--card-bg);border-radius:10px;cursor:pointer}
+.login-hint:hover{color:var(--primary)}
+.new-post-wrap{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:28px;margin-top:8px}
+.post-author-bar{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.post-author-bar-name{font-weight:700;font-size:15px;color:var(--text-dark)}
+.post-author-bar-sub{font-size:12px;color:var(--text-light)}
+.feed-empty{text-align:center;padding:60px 20px;color:var(--text-light)}
+.feed-empty-icon{font-size:48px;margin-bottom:12px}
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.4);display:flex;align-items:center;justify-content:center;z-index:200;}
+.modal-box{background:var(--white);border-radius:20px;padding:32px 28px;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(44,24,16,0.15)}
+.modal-emoji{font-size:40px;margin-bottom:12px}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.modal-desc{font-size:14px;color:var(--text-mid);margin-bottom:24px;line-height:1.6}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-btn{padding:10px 22px;border-radius:20px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.modal-btn-primary{background:var(--primary);color:#fff}
+.modal-btn-primary:hover{background:var(--primary-dark)}
+.modal-btn-ghost{background:var(--card-bg);color:var(--text-mid);border:1.5px solid var(--border)}
+.modal-btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.toast{position:fixed;top:80px;right:20px;background:var(--success);color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;font-size:14px;z-index:300;animation:toastIn .3s ease}
+.toast.hide{animation:toastOut .3s ease forwards}
+.avatar-preview{margin-top:10px;display:flex;align-items:center;gap:10px}
+.img-preview{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
+.tag{display:inline-block;background:var(--card-bg);color:var(--primary);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:auto}
+.empty-posts{text-align:center;padding:32px;color:var(--text-light);background:var(--warm-bg);border-radius:12px;font-size:14px}
+.captcha-box{max-width:400px;width:95%}
+.captcha-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;margin-top:16px}
+.captcha-item{aspect-ratio:1;background-size:cover;background-position:center;border-radius:8px;cursor:pointer;position:relative;border:3px solid transparent;transition:all .2s}
+.captcha-item.selected{border-color:var(--primary);transform:scale(0.96)}
+.captcha-check{position:absolute;top:4px;right:4px;background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+</style>
+
+<div class="app" id="app"></div>
+
+<script>
+const AVATAR_COLORS=[['#FF6B35','#fff'],['#4A90D9','#fff'],['#7B68EE','#fff'],['#2ECC71','#fff'],['#E74C3C','#fff'],['#F39C12','#fff'],['#1ABC9C','#fff']];
+function getAvatarColor(id){const i=(id||'').charCodeAt(0)%AVATAR_COLORS.length;return AVATAR_COLORS[i];}
+
+function compressImage(file, callback) {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = event => {
+    const img = new Image();
+    img.src = event.target.result;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 800;
+      const MAX_HEIGHT = 800;
+      let width = img.width;
+      let height = img.height;
+      if (width > height) {
+        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+      } else {
+        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      callback(canvas.toDataURL('image/jpeg', 0.6));
+    };
+  };
+}
+
+const DEMO_USERS=[
+  {id:'demo',displayName:'示範用戶',password:'1234',avatar:null,bio:'喜歡分享家中毛孩的點點滴滴🐾'},
+  {id:'catmom99',displayName:'貓咪媽媽',password:'1234',avatar:null,bio:'家有三貓，天天都是貓奴生活🐈'},
+];
+const DEMO_POSTS=[
+  {id:'p1',authorId:'catmom99',authorName:'貓咪媽媽',authorAvatar:null,title:'我家橘貓的一天 🍊',content:'每天早上五點準時被踩臉叫醒，肚子餓了就來找我，吃飽之後就倒下睡覺。這就是橘貓的生活！大家的貓咪也是這樣嗎？',image:null,time:Date.now()-3600000*2,likes:12,likedBy:[],comments:[{id:'c1',authorId:'demo',authorName:'示範用戶',authorAvatar:null,text:'哈哈我家的也是！橘貓都一樣 XD'}]},
+  {id:'p2',authorId:'demo',authorName:'示範用戶',authorAvatar:null,title:'柴犬第一次去海邊 🏖️',content:'今天帶柴柴去海邊，牠一看到海浪就嚇跑了！還是沙灘比較適合牠，挖沙挖得超開心的。分享給大家一些小技巧：第一次帶狗去海邊，建議先在沙灘上活動，讓狗狗習慣環境，不要強迫牠靠近水。',image:null,time:Date.now()-3600000*5,likes:27,likedBy:[],comments:[{id:'c2',authorId:'catmom99',authorName:'貓咪媽媽',authorAvatar:null,text:'好可愛！下次帶我家貓去試試哈哈（才不要）'}]},
+  {id:'p3',authorId:'catmom99',authorName:'貓咪媽媽',authorAvatar:null,title:'新手養兔子的注意事項 🐰',content:'最近收養了一隻垂耳兔，才知道原來兔子需要這麼多照顧！牠們不能吃太多水果，需要大量的牧草，還要定期打預防針。分享給想養兔子的朋友們參考！',image:null,time:Date.now()-3600000*24,likes:8,likedBy:[],comments:[]},
+];
+
+const CAPTCHA_IMAGES = [
+  { url: '1.jpg', isTarget: false },
+  { url: '2.jpg', isTarget: true },
+  { url: '3.jpg', isTarget: false },
+  { url: '4.jpg', isTarget: false },
+  { url: '5.jpg', isTarget: false },
+  { url: '6.jpg', isTarget: true },
+  { url: '7.jpg', isTarget: true },
+  { url: '8.jpg', isTarget: false },
+  { url: '9.jpg', isTarget: false },
+];
+// 註：您可以修改上方的 isTarget 為 true/false，來設定哪些圖片是正確答案（朴寶英）
+
+let savedUsers = localStorage.getItem('pawshare_users');
+let savedPosts = localStorage.getItem('pawshare_posts');
+let savedUser = localStorage.getItem('pawshare_current_user');
+
+let parsedUsers = savedUsers ? JSON.parse(savedUsers) : [...DEMO_USERS];
+parsedUsers = parsedUsers.map(u => {
+  if (u.id === 'demo' && !u.bio) u.bio = '喜歡分享家中毛孩的點點滴滴🐾';
+  if (u.id === 'catmom99' && !u.bio) u.bio = '家有三貓，天天都是貓奴生活🐈';
+  return u;
+});
+
+let state={
+  users: parsedUsers,
+  posts: savedPosts ? JSON.parse(savedPosts) : [...DEMO_POSTS],
+  currentUser: savedUser ? JSON.parse(savedUser) : null,
+  view: savedUser ? 'home' : 'feed',
+  toast:null,
+  modal:false,
+  expandedComments:{},
+  commentInputs:{},
+  captchaOpen:false,
+  pendingUser:null,
+  captchaSelection:[],
+  profileUserId:null,
+  editingPostId:null,
+};
+
+let loginForm={id:'',pw:'',err:''};
+let regForm={id:'',name:'',pw:'',avatar:null,avatarSrc:null,err:''};
+let newPostForm={title:'',content:'',image:null,imgSrc:null};
+let editProfileForm={name:'',bio:'',avatarSrc:null};
+
+function setState(patch){
+  Object.assign(state,patch);
+  try {
+    if('users' in patch) localStorage.setItem('pawshare_users', JSON.stringify(state.users));
+    if('posts' in patch) localStorage.setItem('pawshare_posts', JSON.stringify(state.posts));
+    if('currentUser' in patch) {
+      if(state.currentUser) localStorage.setItem('pawshare_current_user', JSON.stringify(state.currentUser));
+      else localStorage.removeItem('pawshare_current_user');
+    }
+  } catch(e) {
+    if(e.name==='QuotaExceededError') alert('儲存空間已滿！過去的上傳圖檔佔用了太多空間，已啟用圖片壓縮機制，未來發文將不受影響。如果您一直無法發文，可以嘗試清除快取。');
+  }
+  render();
+}
+function formatTime(ts){
+  const diff=Date.now()-ts;
+  if(diff<60000)return '剛剛';
+  if(diff<3600000)return Math.floor(diff/60000)+'分鐘前';
+  if(diff<86400000)return Math.floor(diff/3600000)+'小時前';
+  return Math.floor(diff/86400000)+'天前';
+}
+function avatarEl(user,cls=''){
+  const [bg,fg]=getAvatarColor(user?user.id:'?');
+  const letter=(user?(user.displayName||user.id):'?')[0].toUpperCase();
+  if(user&&user.avatar){
+    return `<img src="${user.avatar}" class="avatar-circle ${cls}" style="object-fit:cover">`;
+  }
+  return `<div class="avatar-circle ${cls}" style="background:${bg};color:${fg}">${letter}</div>`;
+}
+function findUser(id){return state.users.find(u=>u.id===id);}
+
+function showToast(msg){
+  setState({toast:msg});
+  setTimeout(()=>setState({toast:null}),2500);
+}
+
+function handleLike(postId){
+  if(!state.currentUser){setState({modal:true});return;}
+  const uid=state.currentUser.id;
+  const posts=state.posts.map(p=>{
+    if(p.id!==postId)return p;
+    const liked=p.likedBy.includes(uid);
+    return {...p,likes:p.likes+(liked?-1:1),likedBy:liked?p.likedBy.filter(x=>x!==uid):[...p.likedBy,uid]};
+  });
+  setState({posts});
+}
+function handleComment(postId){
+  const text=(state.commentInputs[postId]||'').trim();
+  if(!text)return;
+  if(!state.currentUser){setState({modal:true});return;}
+  const u=state.currentUser;
+  const newC={id:'c'+Date.now(),authorId:u.id,authorName:u.displayName,authorAvatar:u.avatar,text};
+  const posts=state.posts.map(p=>{
+    if(p.id!==postId)return p;
+    return {...p,comments:[...p.comments,newC]};
+  });
+  const ci={...state.commentInputs,[postId]:''};
+  setState({posts,commentInputs:ci});
+}
+function toggleComments(postId){
+  const ec={...state.expandedComments,[postId]:!state.expandedComments[postId]};
+  setState({expandedComments:ec});
+}
+
+function renderAvatar(user,cls){
+  const [bg,fg]=getAvatarColor(user?user.id:'?');
+  const letter=(user?(user.displayName||user.id):'?')[0].toUpperCase();
+  const el=document.createElement('div');
+  el.className='avatar-circle '+(cls||'');
+  el.style.background=bg;el.style.color=fg;el.textContent=letter;
+  if(user&&user.avatar){
+    const img=document.createElement('img');
+    img.src=user.avatar;img.className='avatar-circle '+(cls||'');
+    img.style.objectFit='cover';
+    return img;
+  }
+  return el;
+}
+
+function buildPostCard(post,isMine=false){
+  const u=findUser(post.authorId)||{id:post.authorId,displayName:post.authorName,avatar:post.authorAvatar};
+  const liked=state.currentUser&&post.likedBy.includes(state.currentUser.id);
+  const expanded=state.expandedComments[post.id];
+
+  const card=document.createElement('div');
+  card.className='post-card page';
+
+  const header=document.createElement('div');header.className='post-header';
+  const av=renderAvatar(u,'');
+  av.style.cursor='pointer';
+  av.onclick=()=>setState({view:'userProfile',profileUserId:post.authorId});
+  header.appendChild(av);
+  const info=document.createElement('div');info.className='post-author-info';
+  const idDiv=document.createElement('div');idDiv.className='post-author-id';idDiv.style.cursor='pointer';idDiv.textContent=`@${post.authorId}`;
+  idDiv.onclick=()=>setState({view:'userProfile',profileUserId:post.authorId});
+  const timeDiv=document.createElement('div');timeDiv.className='post-time';timeDiv.textContent=formatTime(post.time);
+  info.appendChild(idDiv);info.appendChild(timeDiv);
+  header.appendChild(info);
+  if(isMine){const t=document.createElement('span');t.className='tag';t.textContent='我的';header.appendChild(t);}
+  card.appendChild(header);
+
+  const title=document.createElement('div');title.className='post-title';title.textContent=post.title;card.appendChild(title);
+  const content=document.createElement('div');content.className='post-content';content.textContent=post.content;card.appendChild(content);
+  if(post.image){const img=document.createElement('img');img.className='post-image';img.src=post.image;card.appendChild(img);}
+
+  const actions=document.createElement('div');actions.className='post-actions';
+  const commentBtn=document.createElement('button');commentBtn.className='action-btn';
+  commentBtn.innerHTML=`<i class="ti ti-message-circle" aria-hidden="true"></i> ${post.comments.length}`;
+  commentBtn.onclick=()=>toggleComments(post.id);
+  const likeBtn=document.createElement('button');likeBtn.className='action-btn'+(liked?' liked':'');
+  likeBtn.innerHTML=`<i class="ti ti-heart${liked?'-filled':''}" aria-hidden="true"></i> ${post.likes}`;
+  likeBtn.onclick=()=>handleLike(post.id);
+  actions.appendChild(commentBtn);actions.appendChild(likeBtn);
+
+  if(state.currentUser && post.authorId === state.currentUser.id){
+    const editBtn=document.createElement('button');editBtn.className='action-btn';
+    editBtn.style.marginLeft='auto';
+    editBtn.innerHTML=`<i class="ti ti-edit" aria-hidden="true"></i> 編輯`;
+    editBtn.onclick=()=>{
+      newPostForm = {title:post.title, content:post.content, image:post.image, imgSrc:post.image};
+      setState({editingPostId:post.id, view:'newPost'});
+    };
+    actions.appendChild(editBtn);
+
+    const delBtn=document.createElement('button');delBtn.className='action-btn';
+    delBtn.innerHTML=`<i class="ti ti-trash" aria-hidden="true"></i> 刪除`;
+    delBtn.onclick=()=>{
+      if(confirm('確定要刪除這篇貼文嗎？')){
+        setState({posts:state.posts.filter(p=>p.id!==post.id)});
+        showToast('貼文已刪除');
+      }
+    };
+    actions.appendChild(delBtn);
+  }
+
+  card.appendChild(actions);
+
+  if(expanded){
+    const cs=document.createElement('div');cs.className='comment-section';
+    post.comments.forEach(c=>{
+      const cu=findUser(c.authorId)||{id:c.authorId,displayName:c.authorName,avatar:c.authorAvatar};
+      const ci=document.createElement('div');ci.className='comment-item';
+      ci.appendChild(renderAvatar(cu,'avatar-sm'));
+      const cb=document.createElement('div');cb.className='comment-body';
+      cb.innerHTML=`<div class="comment-id">@${c.authorId}</div><div class="comment-text">${c.text}</div>`;
+      ci.appendChild(cb);cs.appendChild(ci);
+    });
+    if(state.currentUser){
+      const row=document.createElement('div');row.className='comment-input-row';
+      row.appendChild(renderAvatar(state.currentUser,'avatar-sm'));
+      const inp=document.createElement('input');inp.type='text';inp.placeholder='說點什麼吧...';
+      inp.value=state.commentInputs[post.id]||'';
+      inp.oninput=e=>{state.commentInputs={...state.commentInputs,[post.id]:e.target.value};};
+      inp.onkeydown=e=>{if(e.key==='Enter')handleComment(post.id);};
+      const sb=document.createElement('button');sb.className='send-btn';sb.textContent='送出';
+      sb.onclick=()=>handleComment(post.id);
+      row.appendChild(inp);row.appendChild(sb);cs.appendChild(row);
+    } else {
+      const hint=document.createElement('div');hint.className='login-hint';hint.textContent='👋 請先登入才能留言';
+      hint.onclick=()=>setState({view:'login'});cs.appendChild(hint);
+    }
+    card.appendChild(cs);
+  }
+  return card;
+}
+
+function buildNav(){
+  const nav=document.createElement('nav');
+  const logo=document.createElement('div');logo.className='logo';logo.innerHTML='PawShare <span>🐾</span>';
+  logo.onclick=()=>setState({view:state.currentUser?'home':'feed'});
+  nav.appendChild(logo);
+  const right=document.createElement('div');right.className='nav-right';
+  if(state.currentUser){
+    const u=state.currentUser;
+    right.appendChild(renderAvatar(u,''));
+    const name=document.createElement('span');name.className='nav-name';name.textContent=u.displayName;right.appendChild(name);
+    const feedBtn=document.createElement('button');feedBtn.className='nav-btn ghost';feedBtn.textContent='分享區';feedBtn.onclick=()=>setState({view:'feed'});
+    const homeBtn=document.createElement('button');homeBtn.className='nav-btn ghost';homeBtn.textContent='我的主頁';homeBtn.onclick=()=>setState({view:'home'});
+    const outBtn=document.createElement('button');outBtn.className='nav-btn';outBtn.textContent='登出';outBtn.onclick=()=>{setState({currentUser:null,view:'feed'});};
+    right.appendChild(feedBtn);right.appendChild(homeBtn);right.appendChild(outBtn);
+  } else {
+    const loginBtn=document.createElement('button');loginBtn.className='nav-btn';loginBtn.textContent='登入';loginBtn.onclick=()=>setState({view:'login'});
+    const regBtn=document.createElement('button');regBtn.className='nav-btn solid';regBtn.textContent='註冊';regBtn.onclick=()=>setState({view:'register'});
+    right.appendChild(loginBtn);right.appendChild(regBtn);
+  }
+  nav.appendChild(right);
+  return nav;
+}
+
+function buildLoginPage(){
+  const wrap=document.createElement('div');wrap.className='auth-wrap page';
+  const card=document.createElement('div');card.className='auth-card';
+  card.innerHTML=`
+    <div class="auth-title">歡迎回來 🐾</div>
+    <div class="auth-sub">登入你的 PawShare 帳號</div>
+    <div class="form-group"><label>帳號 ID</label><input type="text" id="li-id" placeholder="請輸入帳號" value="${loginForm.id}"></div>
+    <div class="form-group"><label>密碼</label><input type="password" id="li-pw" placeholder="請輸入密碼" value="${loginForm.pw}"></div>
+    ${loginForm.err?`<div class="err-msg">${loginForm.err}</div>`:''}
+  `;
+  const btn=document.createElement('button');btn.className='btn btn-primary';btn.textContent='登入';
+  btn.onclick=()=>{
+    const id=document.getElementById('li-id').value.trim();
+    const pw=document.getElementById('li-pw').value;
+    loginForm={id,pw,err:''};
+    const u=state.users.find(u=>u.id===id&&u.password===pw);
+    if(u){loginForm={id:'',pw:'',err:''};setState({pendingUser:u,captchaOpen:true,captchaSelection:[]});}
+    else{loginForm.err='帳號或密碼錯誤，請再試試看';render();}
+  };
+  card.appendChild(btn);
+  const link=document.createElement('div');link.className='link-text';
+  link.innerHTML='還沒有帳號？<a id="to-reg">立即註冊</a>';
+  card.appendChild(link);
+  wrap.appendChild(card);
+  setTimeout(()=>{
+    const a=document.getElementById('to-reg');if(a)a.onclick=()=>setState({view:'register'});
+  },0);
+  return wrap;
+}
+
+function buildRegPage(){
+  const wrap=document.createElement('div');wrap.className='auth-wrap page';
+  const card=document.createElement('div');card.className='auth-card';
+  const titleDiv=document.createElement('div');
+  titleDiv.innerHTML=`<div class="auth-title">加入 PawShare 🐾</div><div class="auth-sub">建立你的帳號，開始分享毛孩日常</div>`;
+  card.appendChild(titleDiv);
+
+  function field(id,label,type,placeholder,val=''){
+    const g=document.createElement('div');g.className='form-group';
+    g.innerHTML=`<label>${label}</label><input type="${type}" id="${id}" placeholder="${placeholder}" value="${val}">`;
+    return g;
+  }
+  card.appendChild(field('rg-id','帳號 ID','text','僅限英數字，唯一不重複',regForm.id));
+  card.appendChild(field('rg-name','暱稱','text','顯示給大家看的名稱',regForm.name));
+  card.appendChild(field('rg-pw','密碼','password','設定密碼',''));
+
+  const avatarGroup=document.createElement('div');avatarGroup.className='form-group';
+  avatarGroup.innerHTML=`<label>頭貼（選填）</label>
+    <label class="file-label" for="rg-avatar"><i class="ti ti-upload" aria-hidden="true"></i> 點擊上傳頭貼圖片</label>
+    <input type="file" id="rg-avatar" accept="image/*">
+    <div id="avatar-preview" class="avatar-preview" style="display:${regForm.avatarSrc?'flex':'none'}">
+      ${regForm.avatarSrc?`<img src="${regForm.avatarSrc}" class="img-preview"><span style="font-size:13px;color:var(--text-mid)">已選擇頭貼</span>`:''}
+    </div>`;
+  card.appendChild(avatarGroup);
+
+  if(regForm.err){const e=document.createElement('div');e.className='err-msg';e.textContent=regForm.err;card.appendChild(e);}
+
+  const btn=document.createElement('button');btn.className='btn btn-primary';btn.style.marginTop='8px';btn.textContent='建立帳號';
+  btn.onclick=()=>{
+    const id=document.getElementById('rg-id').value.trim();
+    const name=document.getElementById('rg-name').value.trim();
+    const pw=document.getElementById('rg-pw').value;
+    if(!id||!name||!pw){regForm.err='請填寫所有必填欄位';regForm.id=id;regForm.name=name;render();return;}
+    if(state.users.find(u=>u.id===id)){regForm.err='此帳號 ID 已被使用';regForm.id=id;regForm.name=name;render();return;}
+    const newU={id,displayName:name,password:pw,avatar:regForm.avatarSrc||null};
+    regForm={id:'',name:'',pw:'',avatar:null,avatarSrc:null,err:''};
+    setState({users:[...state.users,newU],view:'login'});
+    showToast('帳號建立成功！請登入 🎉');
+  };
+  card.appendChild(btn);
+  const link=document.createElement('div');link.className='link-text';
+  link.innerHTML='已有帳號？<a id="to-login">返回登入</a>';card.appendChild(link);
+  wrap.appendChild(card);
+  setTimeout(()=>{
+    const a=document.getElementById('to-login');if(a)a.onclick=()=>setState({view:'login'});
+    const fi=document.getElementById('rg-avatar');
+    if(fi)fi.onchange=e=>{
+      const file=e.target.files[0];if(!file)return;
+      compressImage(file, compressed => {
+        regForm.avatarSrc=compressed;
+        render();
+      });
+    };
+  },0);
+  return wrap;
+}
+
+function buildHomePage(){
+  const u=state.currentUser;
+  const wrap=document.createElement('div');wrap.className='container page';
+  const hero=document.createElement('div');hero.className='home-hero';
+  hero.innerHTML=`<div style="display:flex;justify-content:center;margin-bottom:12px">${renderAvatar(u,'avatar-lg').outerHTML}</div>
+    <div class="home-title">歡迎回來，${u.displayName}！</div>
+    <div class="home-sub" style="margin-bottom:8px">@${u.id}</div>
+    ${u.bio ? `<div class="post-content" style="max-width:400px;margin:0 auto;color:var(--text-mid);font-size:14px;background:var(--white);padding:10px;border-radius:12px;border:1px solid var(--border)">${u.bio}</div>` : ''}
+    <div style="margin-top:16px"><button class="btn btn-secondary" id="go-edit-profile" style="width:auto;padding:8px 16px;font-size:13px"><i class="ti ti-user-edit"></i> 編輯個人檔案</button></div>`;
+  wrap.appendChild(hero);
+  setTimeout(()=>{
+    const gep=document.getElementById('go-edit-profile');
+    if(gep) gep.onclick=()=>{
+      editProfileForm={name:u.displayName, bio:u.bio||'', avatarSrc:u.avatar};
+      setState({view:'editProfile'});
+    };
+  },0);
+  const nb=document.createElement('button');nb.className='new-post-btn';
+  nb.innerHTML='<i class="ti ti-plus" aria-hidden="true"></i> 新增貼文';
+  nb.onclick=()=>{newPostForm={title:'',content:'',image:null,imgSrc:null};setState({view:'newPost'});};
+  wrap.appendChild(nb);
+  const myPosts=state.posts.filter(p=>p.authorId===u.id).sort((a,b)=>b.time-a.time);
+  const st=document.createElement('div');st.className='section-title';st.innerHTML='<i class="ti ti-notebook" aria-hidden="true"></i> 我的貼文紀錄';
+  wrap.appendChild(st);
+  if(myPosts.length===0){
+    const emp=document.createElement('div');emp.className='empty-posts';emp.textContent='還沒有貼文，趕快分享你的毛孩吧！';wrap.appendChild(emp);
+  } else {
+    myPosts.forEach(p=>wrap.appendChild(buildPostCard(p,true)));
+  }
+  return wrap;
+}
+
+function buildNewPostPage(){
+  const u=state.currentUser;
+  const wrap=document.createElement('div');wrap.className='container page';
+  const box=document.createElement('div');box.className='new-post-wrap';
+  const bar=document.createElement('div');bar.className='post-author-bar';
+  bar.appendChild(renderAvatar(u,'avatar-lg'));
+  const barInfo=document.createElement('div');
+  barInfo.innerHTML=`<div class="post-author-bar-name">${u.displayName}</div><div class="post-author-bar-sub">@${u.id}</div>`;
+  bar.appendChild(barInfo);box.appendChild(bar);
+
+  const tg=document.createElement('div');tg.className='form-group';
+  tg.innerHTML=`<label>發布主題</label><input type="text" id="np-title" placeholder="為你的貼文取個標題..." value="${newPostForm.title}">`;box.appendChild(tg);
+  const cg=document.createElement('div');cg.className='form-group';
+  cg.innerHTML=`<label>發布內容</label><textarea id="np-content" placeholder="分享你和毛孩的故事...">${newPostForm.content}</textarea>`;box.appendChild(cg);
+
+  const ig=document.createElement('div');ig.className='form-group';
+  ig.innerHTML=`<label>上傳照片（選填）</label>
+    <label class="file-label" for="np-img"><i class="ti ti-photo" aria-hidden="true"></i> 點擊上傳照片</label>
+    <input type="file" id="np-img" accept="image/*">
+    ${newPostForm.imgSrc?`<img src="${newPostForm.imgSrc}" style="width:100%;border-radius:12px;margin-top:10px;max-height:200px;object-fit:cover">`:''}`;
+  box.appendChild(ig);
+
+  const isEditing = !!state.editingPostId;
+
+  const btns=document.createElement('div');btns.style.cssText='display:flex;gap:12px;margin-top:20px';
+  const cancel=document.createElement('button');cancel.className='btn btn-secondary';cancel.style.flex='1';cancel.textContent='取消';
+  cancel.onclick=()=>setState({view:'home', editingPostId:null});
+  const submit=document.createElement('button');submit.className='btn btn-primary';submit.style.flex='2';
+  submit.textContent=isEditing ? '儲存修改' : '發布貼文 🐾';
+  submit.onclick=()=>{
+    const title=document.getElementById('np-title').value.trim();
+    const content=document.getElementById('np-content').value.trim();
+    if(!title||!content){alert('請填寫主題與內容');return;}
+    
+    if (isEditing) {
+      const updatedPosts = state.posts.map(p => {
+        if(p.id === state.editingPostId) return {...p, title, content, image:newPostForm.imgSrc||null};
+        return p;
+      });
+      newPostForm={title:'',content:'',image:null,imgSrc:null};
+      setState({posts:updatedPosts, view:'home', editingPostId:null});
+      showToast('貼文已更新 🎉');
+    } else {
+      const newP={
+        id:'p'+Date.now(),authorId:u.id,authorName:u.displayName,authorAvatar:u.avatar,
+        title,content,image:newPostForm.imgSrc||null,
+        time:Date.now(),likes:0,likedBy:[],comments:[]
+      };
+      newPostForm={title:'',content:'',image:null,imgSrc:null};
+      setState({posts:[newP,...state.posts], view:'home'});
+      showToast('發布成功 🎉');
+      
+      setTimeout(()=>{
+        const currentPosts = state.posts;
+        const targetPost = currentPosts.find(p => p.id === newP.id);
+        if(targetPost){
+          const autoComments = ['太可愛了吧！😍', '好想揉揉牠喔～', '原來是這樣啊！長知識了！', '天啊！心融化了❤️', '我也想養一隻！', '這太療癒了✨'];
+          const randomText = autoComments[Math.floor(Math.random() * autoComments.length)];
+          const newComment = { id:'c'+Date.now(), authorId:'catmom99', authorName:'貓咪媽媽', authorAvatar:null, text: randomText };
+          const updatedPosts = currentPosts.map(p => {
+            if(p.id === targetPost.id) {
+              const hasLiked = p.likedBy.includes('catmom99');
+              return { ...p, likes: hasLiked ? p.likes : p.likes + 1, likedBy: hasLiked ? p.likedBy : [...p.likedBy, 'catmom99'], comments: [...p.comments, newComment] };
+            }
+            return p;
+          });
+          setState({posts: updatedPosts});
+          showToast('🐾 有人回應了您的新貼文！');
+        }
+      }, 5000);
+    }
+  };
+  btns.appendChild(cancel);btns.appendChild(submit);box.appendChild(btns);
+  wrap.appendChild(box);
+  setTimeout(()=>{
+    const fi=document.getElementById('np-img');
+    if(fi)fi.onchange=e=>{
+      const file=e.target.files[0];if(!file)return;
+      compressImage(file, compressed => {
+        newPostForm.imgSrc=compressed;
+        render();
+      });
+    };
+    const t=document.getElementById('np-title');if(t)t.oninput=e=>newPostForm.title=e.target.value;
+    const c=document.getElementById('np-content');if(c)c.oninput=e=>newPostForm.content=e.target.value;
+  },0);
+  return wrap;
+}
+
+function buildEditProfilePage(){
+  const wrap=document.createElement('div');wrap.className='auth-wrap page';
+  const card=document.createElement('div');card.className='auth-card';
+  card.innerHTML=`<div class="auth-title">編輯個人檔案</div><div class="auth-sub">更新您的名稱、照片與簡介</div>`;
+
+  const avatarGroup=document.createElement('div');avatarGroup.className='form-group';
+  avatarGroup.innerHTML=`<label>頭貼照</label>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      ${editProfileForm.avatarSrc ? `<img src="${editProfileForm.avatarSrc}" class="avatar-lg" style="object-fit:cover;border-radius:50%;border:2px solid var(--primary)">` : renderAvatar(state.currentUser,'avatar-lg').outerHTML}
+      <label class="file-label" for="ep-avatar" style="flex:1;justify-content:center"><i class="ti ti-upload"></i> 更換大頭貼</label>
+      <input type="file" id="ep-avatar" accept="image/*">
+    </div>`;
+  card.appendChild(avatarGroup);
+
+  const nameGroup=document.createElement('div');nameGroup.className='form-group';
+  nameGroup.innerHTML=`<label>顯示名稱</label><input type="text" id="ep-name" placeholder="您的名稱" value="${editProfileForm.name}">`;
+  card.appendChild(nameGroup);
+
+  const bioGroup=document.createElement('div');bioGroup.className='form-group';
+  bioGroup.innerHTML=`<label>個人簡介</label><textarea id="ep-bio" placeholder="跟大家介紹一下你自己和你的毛孩吧！">${editProfileForm.bio}</textarea>`;
+  card.appendChild(bioGroup);
+
+  const btns=document.createElement('div');btns.style.cssText='display:flex;gap:10px;margin-top:20px';
+  const cancel=document.createElement('button');cancel.className='btn btn-secondary';cancel.style.flex='1';cancel.textContent='取消';
+  cancel.onclick=()=>setState({view:'home'});
+  const save=document.createElement('button');save.className='btn btn-primary';save.style.flex='2';save.textContent='儲存設定';
+  save.onclick=()=>{
+    const name=document.getElementById('ep-name').value.trim();
+    const bio=document.getElementById('ep-bio').value.trim();
+    if(!name){alert('名稱不能為空！');return;}
+    
+    const updatedUser = {...state.currentUser, displayName:name, bio:bio, avatar:editProfileForm.avatarSrc};
+    const updatedUsers = state.users.map(u => u.id === updatedUser.id ? updatedUser : u);
+    const updatedPosts = state.posts.map(p => {
+      if(p.authorId === updatedUser.id) return {...p, authorName:name, authorAvatar:updatedUser.avatar};
+      return p;
+    });
+    
+    setState({currentUser:updatedUser, users:updatedUsers, posts:updatedPosts, view:'home'});
+    showToast('個人資料已更新 ✨');
+  };
+  btns.appendChild(cancel);btns.appendChild(save);card.appendChild(btns);
+  wrap.appendChild(card);
+
+  setTimeout(()=>{
+    const fi=document.getElementById('ep-avatar');
+    if(fi)fi.onchange=e=>{
+      const file=e.target.files[0];if(!file)return;
+      compressImage(file, compressed => {
+        editProfileForm.avatarSrc=compressed;
+        render();
+      });
+    };
+    const n=document.getElementById('ep-name');if(n)n.oninput=e=>editProfileForm.name=e.target.value;
+    const b=document.getElementById('ep-bio');if(b)b.oninput=e=>editProfileForm.bio=e.target.value;
+  },0);
+  
+  return wrap;
+}
+
+function buildFeedPage(){
+  const wrap=document.createElement('div');wrap.className='container page';
+  const st=document.createElement('div');st.className='section-title';st.innerHTML='<i class="ti ti-layout-grid" aria-hidden="true"></i> 大家的毛孩日常';
+  wrap.appendChild(st);
+  const sorted=[...state.posts].sort((a,b)=>b.time-a.time);
+  if(sorted.length===0){
+    const emp=document.createElement('div');emp.className='feed-empty';
+    emp.innerHTML='<div class="feed-empty-icon">🐾</div><p>還沒有貼文，快來第一個分享吧！</p>';
+    wrap.appendChild(emp);
+  } else {
+    sorted.forEach(p=>wrap.appendChild(buildPostCard(p)));
+  }
+  return wrap;
+}
+
+function buildModal(){
+  const ov=document.createElement('div');ov.className='modal-overlay';
+  ov.onclick=e=>{if(e.target===ov)setState({modal:false});};
+  const box=document.createElement('div');box.className='modal-box';
+  box.innerHTML=`<div class="modal-emoji">🐾</div>
+    <div class="modal-title">擁有 PawShare 帳號嗎？</div>
+    <div class="modal-desc">登入後才能按讚與留言，加入我們的毛孩社群吧！</div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-primary" id="modal-login">前往登入</button>
+      <button class="modal-btn modal-btn-ghost" id="modal-close">關閉</button>
+    </div>`;
+  ov.appendChild(box);
+  setTimeout(()=>{
+    const ml=document.getElementById('modal-login');if(ml)ml.onclick=()=>setState({modal:false,view:'login'});
+    const mc=document.getElementById('modal-close');if(mc)mc.onclick=()=>setState({modal:false});
+  },0);
+  return ov;
+}
+
+function buildCaptchaModal(){
+  const ov=document.createElement('div');ov.className='modal-overlay';
+  const box=document.createElement('div');box.className='modal-box captcha-box';
+  
+  const title=document.createElement('div');title.className='modal-title';title.textContent='請選取所有包含朴寶英的圖片';
+  box.appendChild(title);
+  
+  const grid=document.createElement('div');grid.className='captcha-grid';
+  CAPTCHA_IMAGES.forEach((img, idx) => {
+    const item=document.createElement('div');
+    item.className='captcha-item'+(state.captchaSelection.includes(idx)?' selected':'');
+    item.style.backgroundImage=`url(${img.url})`;
+    item.onclick=()=>{
+      let sel=[...state.captchaSelection];
+      if(sel.includes(idx)) sel=sel.filter(i=>i!==idx);
+      else sel.push(idx);
+      state.captchaSelection = sel;
+      if (sel.includes(idx)) {
+        item.classList.add('selected');
+        item.innerHTML='<div class="captcha-check"><i class="ti ti-check" aria-hidden="true"></i></div>';
+      } else {
+        item.classList.remove('selected');
+        item.innerHTML='';
+      }
+    };
+    if(state.captchaSelection.includes(idx)){
+      item.innerHTML='<div class="captcha-check"><i class="ti ti-check" aria-hidden="true"></i></div>';
+    }
+    grid.appendChild(item);
+  });
+  box.appendChild(grid);
+  
+  const err=document.createElement('div');
+  err.id='captcha-err';err.className='err-msg';err.style.display='none';err.textContent='驗證失敗，請確認您選了正確的圖片！';
+  box.appendChild(err);
+
+  const btns=document.createElement('div');btns.className='modal-btns';
+  btns.style.marginTop='20px';
+  const verify=document.createElement('button');verify.className='modal-btn modal-btn-primary';verify.textContent='驗證';
+  verify.onclick=()=>{
+    const correctIndices=CAPTCHA_IMAGES.map((img, i)=>img.isTarget?i:-1).filter(i=>i!==-1);
+    const sel=state.captchaSelection;
+    const isCorrect = correctIndices.length===sel.length && correctIndices.every(i=>sel.includes(i));
+    if(isCorrect){
+      setState({currentUser:state.pendingUser,pendingUser:null,captchaOpen:false,captchaSelection:[],view:'home'});
+      showToast('登入成功！🐾');
+    }else{
+      document.getElementById('captcha-err').style.display='block';
+      setTimeout(()=>setState({captchaSelection:[]}),1500);
+    }
+  };
+  const cancel=document.createElement('button');cancel.className='modal-btn modal-btn-ghost';cancel.textContent='取消';
+  cancel.onclick=()=>setState({captchaOpen:false,pendingUser:null,captchaSelection:[]});
+  
+  btns.appendChild(cancel);btns.appendChild(verify);
+  box.appendChild(btns);
+  
+  const disclaimer=document.createElement('div');
+  disclaimer.style.marginTop='20px';
+  disclaimer.style.fontSize='12px';
+  disclaimer.style.color='var(--text-light)';
+  disclaimer.textContent='資料、圖片引用來自網路公開下載，僅作為本課程使用，不為營利用途';
+  box.appendChild(disclaimer);
+
+  ov.appendChild(box);
+  return ov;
+}
+
+function buildUserProfilePage(){
+  const wrap=document.createElement('div');wrap.className='container page';
+  const uId=state.profileUserId;
+  const u=findUser(uId)||{id:uId,displayName:uId,avatar:null};
+  
+  const hero=document.createElement('div');hero.className='home-hero';
+  hero.innerHTML=`<div style="display:flex;justify-content:center;margin-bottom:12px">${renderAvatar(u,'avatar-lg').outerHTML}</div>
+    <div class="home-title">${u.displayName} 的主頁</div><div class="home-sub" style="margin-bottom:8px">@${u.id}</div>
+    ${u.bio ? `<div class="post-content" style="max-width:400px;margin:0 auto;color:var(--text-mid);font-size:14px;background:var(--white);padding:10px;border-radius:12px;border:1px solid var(--border)">${u.bio}</div>` : ''}`;
+  wrap.appendChild(hero);
+  
+  const userPosts=state.posts.filter(p=>p.authorId===uId).sort((a,b)=>b.time-a.time);
+  const st=document.createElement('div');st.className='section-title';st.innerHTML=`<i class="ti ti-notebook" aria-hidden="true"></i> ${u.displayName} 的發布紀錄`;
+  wrap.appendChild(st);
+  
+  if(userPosts.length===0){
+    const emp=document.createElement('div');emp.className='empty-posts';emp.textContent='這位用戶還沒有發布任何貼文。';wrap.appendChild(emp);
+  } else {
+    userPosts.forEach(p=>wrap.appendChild(buildPostCard(p, state.currentUser && state.currentUser.id===p.authorId)));
+  }
+  
+  const backBtn=document.createElement('button');backBtn.className='btn btn-secondary';
+  backBtn.style.marginTop='20px';backBtn.innerHTML='<i class="ti ti-arrow-left"></i> 返回上一頁';
+  backBtn.onclick=()=>setState({view:'feed'});
+  wrap.appendChild(backBtn);
+  
+  return wrap;
+}
+
+function render(){
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  app.appendChild(buildNav());
+  if(state.view==='login')app.appendChild(buildLoginPage());
+  else if(state.view==='register')app.appendChild(buildRegPage());
+  else if(state.view==='home'&&state.currentUser)app.appendChild(buildHomePage());
+  else if(state.view==='newPost'&&state.currentUser)app.appendChild(buildNewPostPage());
+  else if(state.view==='editProfile'&&state.currentUser)app.appendChild(buildEditProfilePage());
+  else if(state.view==='userProfile')app.appendChild(buildUserProfilePage());
+  else app.appendChild(buildFeedPage());
+  if(state.modal)app.appendChild(buildModal());
+  if(state.captchaOpen)app.appendChild(buildCaptchaModal());
+  if(state.toast){
+    const t=document.createElement('div');t.className='toast';t.textContent=state.toast;app.appendChild(t);
+  }
+}
+render();
+</script>
